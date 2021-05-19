@@ -1,0 +1,5 @@
+numpy~=1.20.1
+setuptools~=49.3.1
+h5py~=3.1.0
+scipy~=1.6.0
+matplotlib~=3.3.3
