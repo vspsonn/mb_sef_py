@@ -18,7 +18,7 @@ class GeneralizedAlpha:
             'alpha_f': rho_inf / (1. + rho_inf),
             'alpha_m': (2. * rho_inf - 1.) / (rho_inf + 1.),
             'gamma': 0.5 * (3. - rho_inf) / (1. + rho_inf),
-            'beta': 1. / ((1. + rho_inf) * (1. + rho_inf))
+            'beta': 1. / ((1. + rho_inf) * (1. + rho_inf)),
         }
         parameters.update({
             'gamma_p': parameters['gamma'] / (parameters['beta'] * h),
@@ -28,8 +28,10 @@ class GeneralizedAlpha:
 
     def solve(self):
         self.model.initialize(TypeOfAnalysis.DYNAMIC)
+
         if self.logger:
             self.logger.initialize(self.model)
+
         assembly_coefs = dict_of_assembly_coefs()
 
         # Initial acceleration
@@ -82,7 +84,7 @@ class GeneralizedAlpha:
                       '; nres_c: ', norm_res_cons, ' / ', ref.norm_constraints)
 
                 if norm_res_forces <= self.tip.tol_res_forces * (1. + ref.norm_forces) and \
-                   norm_res_cons <= self.tip.tol_res_constraints * (1 + ref.norm_constraints):
+                   norm_res_cons <= self.tip.tol_res_constraints * (1. + ref.norm_constraints):
                     break
 
                 st = self.model.build_iteration_matrix_from_sparse_representation()
@@ -92,12 +94,12 @@ class GeneralizedAlpha:
                 self.model.v_dot -= gap['beta_p'] * corr[:n_motion]
                 self.model.kinematic_update()
 
-                number_of_iterations = number_of_iterations + 1
+                number_of_iterations += 1
 
             a_n += (1. - gap['alpha_f'])/(1. - gap['alpha_m']) * self.model.v_dot[:]
 
             max_number_of_iterations = max(max_number_of_iterations, number_of_iterations)
-            mean_number_of_iterations = mean_number_of_iterations + number_of_iterations
+            mean_number_of_iterations += number_of_iterations
             if self.logger:
                 self.logger.log_step(step+1)
 
