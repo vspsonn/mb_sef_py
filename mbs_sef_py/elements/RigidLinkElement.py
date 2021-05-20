@@ -16,10 +16,10 @@ class RigidLinkProperties(ElementWithConstraintsProperties):
 
 
 class RigidLinkElement(ElementWithConstraints):
-    def __init__(self, props, node_1, node_2):
+    def __init__(self, props, node_A, node_B):
         ElementWithConstraints.__init__(self, props)
-        self.add_node(node_1)
-        self.add_node(node_2)
+        self.add_node(node_A)
+        self.add_node(node_B)
 
         self.frame_0 = None
         self.inverse_adjoint_frame_0 = None

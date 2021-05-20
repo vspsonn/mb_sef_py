@@ -41,9 +41,7 @@ class CylindricalJointProperties(KinematicJointProperties):
     def __init__(self, axis):
         KinematicJointProperties.__init__(self)
         self.axis = axis.reshape((3, 1))
-        print(self.A[:3, 0].shape)
-        self.A[:3, 0] = self.axis[:, 0]
-        self.A[3:, 1] = self.axis[:, 0]
+        self.A[:3, 0] = self.A[3:, 1] = self.axis[:, 0]
 
     @staticmethod
     def get_number_of_relative_dof():

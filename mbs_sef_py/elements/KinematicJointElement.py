@@ -7,15 +7,16 @@ from ..math.SE3 import Frame, breve6
 
 
 class KinematicJointElement(ElementWithConstraints):
-    def __init__(self, props, node_1, node_2):
+    def __init__(self, props, node_A, node_B):
         ElementWithConstraints.__init__(self, props)
-        self.add_node(node_1)
-        self.add_node(node_2)
+        self.add_node(node_A)
+        self.add_node(node_B)
 
     def get_number_of_dofs(self):
         return 12 + self.elem_props.get_number_of_relative_dof()
 
-    def get_number_of_constraints(self):
+    @staticmethod
+    def get_number_of_constraints():
         return 6
 
     def mesh(self, model):

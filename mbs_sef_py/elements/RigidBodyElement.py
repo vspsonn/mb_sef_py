@@ -26,9 +26,6 @@ class RigidBodyElement(Element):
     def get_number_of_dofs(self):
         return 6
 
-    def initialize(self, model):
-        Element.initialize(self, model)
-
     def assemble_res_impl(self, model, solver_params):
         if model.analysis_type != TypeOfAnalysis.DYNAMIC:
             self.res = np.zeros((6,))

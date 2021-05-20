@@ -26,7 +26,8 @@ class ClampedFrame(ElementWithConstraints):
     def get_number_of_dofs(self):
         return 6
 
-    def get_number_of_constraints(self):
+    @staticmethod
+    def get_number_of_constraints():
         return 6
 
     def initialize(self, model):

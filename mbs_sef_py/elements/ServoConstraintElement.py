@@ -28,7 +28,8 @@ class ServoConstraintElement(ElementWithConstraints):
     def get_number_of_dofs(self):
         return 1
 
-    def get_number_of_constraints(self):
+    @staticmethod
+    def get_number_of_constraints():
         return 1
 
     def initialize(self, model):

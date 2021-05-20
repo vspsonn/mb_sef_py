@@ -14,7 +14,8 @@ class GroundJointElement(ElementWithConstraints):
     def get_number_of_dofs(self):
         return 6 + self.elem_props.get_number_of_relative_dof()
 
-    def get_number_of_constraints(self):
+    @staticmethod
+    def get_number_of_constraints():
         return 6
 
     def mesh(self, model):

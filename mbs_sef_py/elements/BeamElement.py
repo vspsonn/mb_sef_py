@@ -90,10 +90,10 @@ def discretize_beam(model, node_start, node_end, number_of_element, props):
 
 
 class BeamElement(Element):
-    def __init__(self, props, node_1, node_2):
+    def __init__(self, props, node_A, node_B):
         Element.__init__(self, props)
-        self.add_node(node_1)
-        self.add_node(node_2)
+        self.add_node(node_A)
+        self.add_node(node_B)
 
         self.d0 = None
         self.L = None
