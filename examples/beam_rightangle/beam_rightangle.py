@@ -1,11 +1,11 @@
 import numpy as np
 
-from mbs_sef_py.core import Model, NodalFrame
-from mbs_sef_py.elements import BeamProperties_EIGJ, discretize_beam, ClampedFrameProperties, RigidLinkProperties, \
+from mb_sef_py.core import Model, NodalFrame
+from mb_sef_py.elements import BeamProperties_EIGJ, discretize_beam, ClampedFrameProperties, RigidLinkProperties, \
     ExternalForceProperties
-from mbs_sef_py.math import Frame, UnitQuaternion
-from mbs_sef_py.solvers import TimeIntegrationParameters, GeneralizedAlpha
-from mbs_sef_py.utils import Logger, SensorNode, LogNodalFields
+from mb_sef_py.math import Frame, UnitQuaternion
+from mb_sef_py.solvers import TimeIntegrationParameters, GeneralizedAlpha
+from mb_sef_py.utils import Logger, SensorNode, LogNodalFields
 
 
 def loading(t):

@@ -7,10 +7,10 @@ major = '0'
 minor = '0'
 patch = '0'
 
-setup(name='mbs_sef_py',
+setup(name='mb_sef_py',
       version= major + '.' + minor + '.' + patch,
       license="",
-      description='mbs_sef_py',
+      description='mb_sef_py',
       packages=find_packages(),
       install_requires=[]
       )

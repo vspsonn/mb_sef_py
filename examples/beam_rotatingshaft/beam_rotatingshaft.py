@@ -1,13 +1,13 @@
 import numpy as np
 from scipy.integrate import quad as scipy_quad
 
-from mbs_sef_py.core import Model, NodalFrame
-from mbs_sef_py.elements import BeamProperties_EIGJ, discretize_beam, HingeJointProperties, GroundJointElement, \
+from mb_sef_py.core import Model, NodalFrame
+from mb_sef_py.elements import BeamProperties_EIGJ, discretize_beam, HingeJointProperties, GroundJointElement, \
     ServoConstraintProperties, RigidBodyProperties, RigidLinkProperties, \
     CylindricalJointProperties, ExternalForceProperties
-from mbs_sef_py.math import Frame
-from mbs_sef_py.solvers import TimeIntegrationParameters, GeneralizedAlpha
-from mbs_sef_py.utils import Logger, SensorNode, LogNodalFields
+from mb_sef_py.math import Frame
+from mb_sef_py.solvers import TimeIntegrationParameters, GeneralizedAlpha
+from mb_sef_py.utils import Logger, SensorNode, LogNodalFields
 
 
 def imposed_rotational_velocity(t):

@@ -1,7 +1,7 @@
 import h5py
 import numpy as np
 import matplotlib.pyplot as plt
-from mbs_sef_py.math.SE3 import tilde
+from mb_sef_py.math.SE3 import tilde
 
 
 file_name = "beam_haug.h5"
