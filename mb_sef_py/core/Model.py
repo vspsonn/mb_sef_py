@@ -132,6 +132,14 @@ class Model:
         if self.analysis_type != TypeOfAnalysis.STATIC:
             n_fm = self.number_of_dofs[TypeOfVariables.MOTION] + self.number_of_dofs[TypeOfVariables.RELATIVE_MOTION]
             self.v = np.zeros((n_fm,))
+
+            for field in [TypeOfVariables.MOTION, TypeOfVariables.RELATIVE_MOTION]:
+                for node in self.list_nodes[field]:
+                    if node.v0 is not None:
+                        i0 = self.dof_offsets[field] + node.get_first_index_dof()
+                        i1 = i0 + node.get_number_of_dofs()
+                        self.v[i0:i1] = node.v0[:]
+
             self.v_dot = np.zeros((n_fm,))
         else:
             self.v = None
