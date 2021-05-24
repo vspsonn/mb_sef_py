@@ -12,6 +12,8 @@ class GeneralizedAlpha:
         self.tip = tip
         self.logger = logger
 
+        self.number_of_iterations = None
+
     @staticmethod
     def parameters(rho_inf, h):
         parameters = {
@@ -30,7 +32,7 @@ class GeneralizedAlpha:
         self.model.initialize(TypeOfAnalysis.DYNAMIC)
 
         if self.logger:
-            self.logger.initialize(self.model)
+            self.logger.initialize(self.model, self)
 
         assembly_coefs = dict_of_assembly_coefs()
 
@@ -73,13 +75,13 @@ class GeneralizedAlpha:
             self.model.inc[n_motion:] *= 0.
             self.model.kinematic_update()
 
-            number_of_iterations = 0
-            while number_of_iterations < self.tip.nit_max:
+            self.number_of_iterations = 0
+            while self.number_of_iterations < self.tip.nit_max:
                 ref = self.model.assemble_res_st(assembly_coefs, self.tip)
 
                 norm_res_forces = np.linalg.norm(self.model.res[:n_motion])
                 norm_res_cons = np.linalg.norm(self.model.res[n_motion:])
-                print('nit: ', number_of_iterations,
+                print('nit: ', self.number_of_iterations,
                       '; nres_f: ', norm_res_forces, ' / ', ref.norm_forces,
                       '; nres_c: ', norm_res_cons, ' / ', ref.norm_constraints)
 
@@ -94,12 +96,12 @@ class GeneralizedAlpha:
                 self.model.v_dot -= gap['beta_p'] * corr[:n_motion]
                 self.model.kinematic_update()
 
-                number_of_iterations += 1
+                self.number_of_iterations += 1
 
             a_n += (1. - gap['alpha_f'])/(1. - gap['alpha_m']) * self.model.v_dot[:]
 
-            max_number_of_iterations = max(max_number_of_iterations, number_of_iterations)
-            mean_number_of_iterations += number_of_iterations
+            max_number_of_iterations = max(max_number_of_iterations, self.number_of_iterations)
+            mean_number_of_iterations += self.number_of_iterations
             if self.logger:
                 self.logger.log_step(step+1)
 

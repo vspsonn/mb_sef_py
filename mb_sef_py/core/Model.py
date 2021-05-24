@@ -54,6 +54,7 @@ class Model:
         self.inc = None
         self.v = None
         self.v_dot = None
+
         self.mechanical_power = 0.
 
     def add_node(self, node_type, *args):
@@ -149,12 +150,13 @@ class Model:
         ref = ResidueReturn()
         self.res *= 0.
         self.st_triplets = TripletsSparseRepresentation()
+        self.mechanical_power = 0.
         for element in self.list_elements:
             ref = ref + element.assemble_res(self, solver_param)
             self.res[element.loc_dof] += element.res[:]
             element.assemble_st(self, coefs)
             self.st_triplets.add_with_matrix_and_loc_dof(element.st, element.loc_dof)
-        self.mechanical_power = ref.mechanical_power
+            self.mechanical_power += element.get_mechanical_power(self)
         return ref
 
     def build_iteration_matrix_from_sparse_representation(self):

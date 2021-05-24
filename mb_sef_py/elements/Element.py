@@ -70,6 +70,9 @@ class Element(abc.ABC):
     def assemble_mt_impl(self, model):
         return False
 
+    def get_mechanical_power(self, model):
+        return np.dot(model.v[self.loc_dof], self.res)
+
 
 class ElementWithConstraints(Element):
     def __init__(self, props):
@@ -121,3 +124,6 @@ class ElementWithConstraints(Element):
 
     def assemble_bt_impl(self, model):
         return True
+
+    def get_mechanical_power(self, model):
+        return 0.

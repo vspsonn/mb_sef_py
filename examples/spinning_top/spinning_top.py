@@ -32,14 +32,15 @@ ef_props = ExternalForceProperties()
 ef_props.forces[2] = -9.81 * 15.
 model.add_element(ef_props, node_1)
 
-logger = Logger('spinning_top', periodicity=5)
+logger = Logger('spinning_top', periodicity=1)
 logger.add_sensor(SensorNode(node_1, LogNodalFields.MOTION))
 logger.add_sensor(SensorNode(node_1, LogNodalFields.VELOCITY))
 
 time_integration_parameters = TimeIntegrationParameters()
-time_integration_parameters.rho = .8
+time_integration_parameters.rho = .85
 time_integration_parameters.T = 2.
-time_integration_parameters.h = 1.25e-4
+time_integration_parameters.h = 2.e-3
+time_integration_parameters.nit_max = 10
 integrator = GeneralizedAlpha(model, time_integration_parameters, logger)
 
 integrator.solve()
