@@ -38,6 +38,7 @@ class Element(abc.ABC):
                     self.loc_dof.append(i)
 
     def initialize(self, model):
+        self.build_loc_dof(model)
         size_res = self.get_size_res()
         self.res = np.zeros((size_res,))
         self.st = np.zeros((size_res, size_res))

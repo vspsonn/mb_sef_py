@@ -32,12 +32,15 @@ class ServoConstraintElement(ElementWithConstraints):
     def get_number_of_constraints():
         return 1
 
-    def initialize(self, model):
-        ElementWithConstraints.initialize(self, model)
+    def mesh(self, model):
+        ElementWithConstraints.mesh(self, model)
         element = model.list_elements[self.element_number]
         node_rel_dof = element.list_nodes[TypeOfVariables.RELATIVE_MOTION][0]
         self.add_node(node_rel_dof)
 
+    def initialize(self, model):
+        ElementWithConstraints.initialize(self, model)
+        node_rel_dof = self.list_nodes[TypeOfVariables.RELATIVE_MOTION][0]
         self.bt = np.matmul(np.transpose(node_rel_dof.A), node_rel_dof.A)
 
         self.previous_frame = node_rel_dof.frame_0

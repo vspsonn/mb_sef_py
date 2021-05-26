@@ -35,8 +35,11 @@ class Node(abc.ABC):
     def set_initial_velocity(self, v0):
         self.v0 = v0
 
-    def initialize(self):
-        pass
+    def initialize(self, model):
+        if self.v0 is not None:
+            i0 = model.dof_offsets[self.get_field()] + self.get_first_index_dof()
+            i1 = i0 + self.get_number_of_dofs()
+            model.v[i0:i1] = self.v0[:]
 
     def kinematic_update(self, inc, previous_index, current_index):
         pass

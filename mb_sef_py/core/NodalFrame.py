@@ -18,7 +18,8 @@ class NodalFrame(Node):
     def get_number_of_dofs(self):
         return 6
 
-    def initialize(self):
+    def initialize(self, model):
+        Node.initialize(self, model)
         self.frame = [Frame(ref_frame=self.frame_0), Frame(ref_frame=self.frame_0)]
 
     def set_frame_0(self, frame_0):

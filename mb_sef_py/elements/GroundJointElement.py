@@ -25,9 +25,15 @@ class GroundJointElement(ElementWithConstraints):
 
     def initialize(self, model):
         ElementWithConstraints.initialize(self, model)
-        self.list_nodes[TypeOfVariables.RELATIVE_MOTION][0].set_frame_0(self.list_nodes[TypeOfVariables.MOTION][0].frame_0)
+        node_rel_dof = self.list_nodes[TypeOfVariables.RELATIVE_MOTION][0]
+        node_rel_dof.set_frame_0(self.list_nodes[TypeOfVariables.MOTION][0].frame_0)
 
         self.bt = np.block([-np.eye(6), self.elem_props.A])
+
+        ATA = np.matmul(np.transpose(self.elem_props.A), self.elem_props.A)
+        node_rel_dof.v0 = np.linalg.solve(ATA, np.matmul(np.transpose(self.elem_props.A),
+                                                         model.v[self.loc_dof[:6]]))
+        model.v[self.loc_dof[6:self.get_number_of_dofs()]] = node_rel_dof.v0
 
     def assemble_constraint_and_bt(self, model):
         frame_A = self.list_nodes[TypeOfVariables.MOTION][0].frame[model.current_configuration]

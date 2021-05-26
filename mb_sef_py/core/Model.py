@@ -110,13 +110,21 @@ class Model:
         self.previous_configuration = 0
         self.current_configuration = 1
 
+        if self.analysis_type != TypeOfAnalysis.STATIC:
+            n_fm = self.number_of_dofs[TypeOfVariables.MOTION] + self.number_of_dofs[TypeOfVariables.RELATIVE_MOTION]
+            self.v = np.zeros((n_fm,))
+            self.v_dot = np.zeros((n_fm,))
+        else:
+            self.v = None
+            self.v_dot = None
+
         if not self.is_core_initialized:
             self.time = 0.
             self.mechanical_power = 0.
 
             for field in range(TypeOfVariables.Count):
                 for node in self.list_nodes[field]:
-                    node.initialize()
+                    node.initialize(self)
 
             for element in self.list_elements:
                 element.initialize(self)
@@ -130,21 +138,6 @@ class Model:
             self.st_triplets = TripletsSparseRepresentation()
 
         self.inc = np.zeros((self.size_res,))
-        if self.analysis_type != TypeOfAnalysis.STATIC:
-            n_fm = self.number_of_dofs[TypeOfVariables.MOTION] + self.number_of_dofs[TypeOfVariables.RELATIVE_MOTION]
-            self.v = np.zeros((n_fm,))
-
-            for field in [TypeOfVariables.MOTION, TypeOfVariables.RELATIVE_MOTION]:
-                for node in self.list_nodes[field]:
-                    if node.v0 is not None:
-                        i0 = self.dof_offsets[field] + node.get_first_index_dof()
-                        i1 = i0 + node.get_number_of_dofs()
-                        self.v[i0:i1] = node.v0[:]
-
-            self.v_dot = np.zeros((n_fm,))
-        else:
-            self.v = None
-            self.v_dot = None
 
     def assemble_res_st(self, coefs, solver_param):
         ref = ResidueReturn()

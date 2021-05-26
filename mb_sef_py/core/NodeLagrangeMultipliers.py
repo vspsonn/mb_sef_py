@@ -18,7 +18,8 @@ class NodeLagrangeMultipliers(Node):
     def get_number_of_dofs(self):
         return self.number_of_multipliers
 
-    def initialize(self):
+    def initialize(self, model):
+        Node.initialize(self, model)
         self.lambd[0] *= 0.
         self.lambd[1] *= 0.
 

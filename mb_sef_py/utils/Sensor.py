@@ -58,7 +58,7 @@ class SensorNode(Sensor):
         if self.log_field == LogNodalFields.MOTION:
             return 7
         elif self.log_field in [LogNodalFields.VELOCITY, LogNodalFields.ACCELERATION]:
-            return 6
+            return self.node.get_number_of_dofs()
         else:
             return 0
 
@@ -68,8 +68,8 @@ class SensorNode(Sensor):
             frame = self.node.frame[model.current_configuration]
             self.dataset_id[:, step] = np.block([frame.x, frame.q.e0, frame.q.e])
         elif self.log_field == LogNodalFields.VELOCITY:
-            first_index_dof = model.dof_offsets[TypeOfVariables.MOTION] + self.node.get_first_index_dof()
-            self.dataset_id[:, step] = model.v[first_index_dof:first_index_dof+6]
+            first_index_dof = model.dof_offsets[self.node.get_field()] + self.node.get_first_index_dof()
+            self.dataset_id[:, step] = model.v[first_index_dof:first_index_dof+self.node.get_number_of_dofs()]
         elif self.log_field == LogNodalFields.ACCELERATION:
-            first_index_dof = model.dof_offsets[TypeOfVariables.MOTION] + self.node.get_first_index_dof()
-            self.dataset_id[:, step] = model.v_dot[first_index_dof:first_index_dof+6]
+            first_index_dof = model.dof_offsets[self.node.get_field()] + self.node.get_first_index_dof()
+            self.dataset_id[:, step] = model.v_dot[first_index_dof:first_index_dof+self.node.get_number_of_dofs()]
