@@ -132,9 +132,6 @@ class BeamElement(Element):
             T_star = s * np.matmul(Frame.get_tangent_operator(s * d), P[:, 6:])
             Q[:, :6], Q[:, 6:] = np.eye(6) - T_star, T_star
 
-            if self.elem_props.distributed_follower_load is not None:
-                self.res -= np.matmul(np.transpose(Q), (0.5 * w * self.L) * self.elem_props.distributed_follower_load(s, model.time))
-
             distributed_load, distributed_load_flag = np.zeros((6,)), False
             if self.elem_props.distributed_load is not None:
                 distributed_load_flag = True
@@ -145,7 +142,7 @@ class BeamElement(Element):
 
             if distributed_load_flag:
                 H = HA * Frame.get_frame_from_parameters(s * d)
-                RT = H.q.get_inverse().get_rotation_matrix()
+                RT = np.transpose(H.q.get_rotation_matrix())
                 distributed_load[:3] = np.matmul(RT, distributed_load[:3])
                 distributed_load[3:] = np.matmul(RT, distributed_load[3:])
                 dloadQ = np.block([[np.matmul(tilde((0.5 * w * self.L) * distributed_load[:3]), Q[3:, :])],
@@ -173,6 +170,16 @@ class BeamElement(Element):
                 self.mt += np.matmul(QTM, Q)
 
     def assemble_kt_impl(self, model):
+        HA = self.list_nodes[TypeOfVariables.MOTION][0].frame[model.current_configuration]
+        HB = self.list_nodes[TypeOfVariables.MOTION][1].frame[model.current_configuration]
+
+        d = Frame.get_parameters_from_frame(HA.get_inverse() * HB)
+        P = np.zeros((6, 12))
+        P[:, :6], P[:, 6:] = -Frame.get_inverse_tangent_operator(-d), Frame.get_inverse_tangent_operator(d)
+        F = np.matmul(self.elem_props.K, d-self.d0)
+        self.kt[:6, :] += np.matmul(Frame.get_derivative_inverse_transposed_tangent_operator(-d, F), P)
+        self.kt[6:, :] += np.matmul(Frame.get_derivative_inverse_transposed_tangent_operator(d, F), P)
+
         self.at = self.kt
         return True
 

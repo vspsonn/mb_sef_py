@@ -82,3 +82,16 @@ class Frame:
         rho = np.dot(parameters[:3], parameters[3:])
         Tm1[:3, 3:] = -rho / (4. * p0) * np.eye(3) + tilde(0.5 * parameters[:3])
         return Tm1
+
+    @staticmethod
+    def get_derivative_inverse_transposed_tangent_operator(parameters, direction):
+        pu, pw = parameters[:3].reshape((3, 1)), parameters[3:].reshape((3, 1))
+        du, dw = direction[:3].reshape((3, 1)), direction[3:].reshape((3, 1))
+
+        p0, rho = np.sqrt(1. - 0.25 * np.dot(parameters[:3], parameters[:3])), np.dot(parameters[3:], parameters[:3])
+
+        DTinvT0u = tilde(0.5 * du) - np.matmul((0.25/p0) * du, np.transpose(pw))
+        DTinvT0r = tilde(0.5 * dw) - np.matmul((0.25/p0) * dw, np.transpose(pw))
+        DTinvT2 = np.matmul(-0.25 * rho * 0.25/(p0*p0*p0) * du, np.transpose(pw)) - np.matmul(0.25/p0 * du, np.transpose(pu))
+
+        return np.block([[np.zeros((3, 3)), DTinvT0u], [DTinvT0u, DTinvT0r+DTinvT2]])
