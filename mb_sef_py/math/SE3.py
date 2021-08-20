@@ -88,7 +88,7 @@ class Frame:
         pu, pw = parameters[:3].reshape((3, 1)), parameters[3:].reshape((3, 1))
         du, dw = direction[:3].reshape((3, 1)), direction[3:].reshape((3, 1))
 
-        p0, rho = np.sqrt(1. - 0.25 * np.dot(parameters[:3], parameters[:3])), np.dot(parameters[3:], parameters[:3])
+        p0, rho = np.sqrt(1. - 0.25 * np.dot(parameters[3:], parameters[3:])), np.dot(parameters[3:], parameters[:3])
 
         DTinvT0u = tilde(0.5 * du) - np.matmul((0.25/p0) * du, np.transpose(pw))
         DTinvT0r = tilde(0.5 * dw) - np.matmul((0.25/p0) * dw, np.transpose(pw))

@@ -15,6 +15,13 @@ class NodalFrame(Node):
     def get_field():
         return TypeOfVariables.MOTION
 
+    def get_number_of_motion_coordinates(self):
+        return 7
+
+    def get_motion_coordinates(self, configuration):
+        frame = self.frame[configuration]
+        return np.block([frame.x, frame.q.e0, frame.q.e])
+
     def get_number_of_dofs(self):
         return 6
 

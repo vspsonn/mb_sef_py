@@ -54,8 +54,13 @@ class UnitQuaternion:
         self.e = q.e[:]
 
     def set_from_triad(self, v1, v2, v3=None):
+        v1 = v1 / np.linalg.norm(v1)
+        v2 = v2 / np.linalg.norm(v2)
         if v3 is None:
             v3 = np.matmul(tilde(v1), v2)
+        else:
+            v3 = v3/np.linalg.norm(v3)
+
         ind = 0
         s_max = v1[0] + v2[1] + v3[2]
         s = v1[0] - v2[1] - v3[2]
@@ -99,3 +104,12 @@ class UnitQuaternion:
     def get_rotation_matrix(self):
         e_tilde = tilde(self.e[:])
         return np.eye(3) + 2. * (self.e0 * e_tilde + np.matmul(e_tilde, e_tilde))
+
+    @staticmethod
+    def get_unitquat_from_parameters(parameters):
+        p0 = np.sqrt(1. - 0.25 * np.dot(parameters, parameters))
+        return UnitQuaternion(e0=p0, e=0.5 * parameters)
+
+    @staticmethod
+    def get_parameters_from_unitquat(unitquat):
+        return 2. * unitquat.e[:]

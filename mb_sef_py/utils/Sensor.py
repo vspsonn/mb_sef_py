@@ -1,6 +1,4 @@
 import abc
-import numpy as np
-from ..core.TypeOfVariables import TypeOfVariables
 
 
 class LogNodalFields:
@@ -56,7 +54,7 @@ class SensorNode(Sensor):
 
     def get_dataset_number_of_rows(self):
         if self.log_field == LogNodalFields.MOTION:
-            return 7
+            return self.node.get_number_of_motion_coordinates()
         elif self.log_field in [LogNodalFields.VELOCITY, LogNodalFields.ACCELERATION]:
             return self.node.get_number_of_dofs()
         else:
@@ -65,8 +63,7 @@ class SensorNode(Sensor):
     def log_step(self, model, step):
         self.dataset_id.resize(step+1, axis=1)
         if self.log_field == LogNodalFields.MOTION:
-            frame = self.node.frame[model.current_configuration]
-            self.dataset_id[:, step] = np.block([frame.x, frame.q.e0, frame.q.e])
+            self.dataset_id[:, step] = self.node.get_motion_coordinates(model.current_configuration)
         elif self.log_field == LogNodalFields.VELOCITY:
             first_index_dof = model.dof_offsets[self.node.get_field()] + self.node.get_first_index_dof()
             self.dataset_id[:, step] = model.v[first_index_dof:first_index_dof+self.node.get_number_of_dofs()]
