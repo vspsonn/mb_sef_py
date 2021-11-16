@@ -40,8 +40,8 @@ class ExternalForce(Element):
 
     def assemble_kt_impl(self, model):
         if self.elem_props.follower:
+            return False
+        else:
             self.at = np.block([[np.zeros((3, 3)), tilde(self.res[:3])],
                                 [np.zeros((3, 3)), tilde(self.res[3:])]])
             return True
-        else:
-            return False

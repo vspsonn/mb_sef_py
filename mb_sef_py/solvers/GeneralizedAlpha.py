@@ -62,7 +62,7 @@ class GeneralizedAlpha:
 
         for step in range(number_of_steps):
             self.model.advance_time_step(self.tip.h)
-            print('time: ', self.model.time)
+            print('time: ', self.model.time, '; step: ', step)
 
             self.model.inc[:n_motion] = self.tip.h * self.model.v[:] + \
                                         (0.5 - gap['beta']) * self.tip.h * self.tip.h * a_n[:]

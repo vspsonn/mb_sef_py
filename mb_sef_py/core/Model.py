@@ -156,9 +156,7 @@ class Model:
         return csc_matrix((self.st_triplets.data, (self.st_triplets.row, self.st_triplets.col)),
                           shape=(self.size_res, self.size_res))
 
-    def kinematic_update(self, fields=None):
-        if fields is None:
-            fields = range(TypeOfVariables.Count)
+    def kinematic_update(self, fields=range(TypeOfVariables.Count)):
         for field in fields:
             for node in self.list_nodes[field]:
                 i0 = self.dof_offsets[field] + node.get_first_index_dof()
