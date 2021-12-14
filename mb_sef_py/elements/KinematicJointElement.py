@@ -26,14 +26,14 @@ class KinematicJointElement(ElementWithConstraints):
 
     def initialize(self, model):
         ElementWithConstraints.initialize(self, model)
-        frame_0 = self.list_nodes[TypeOfVariables.MOTION][0].frame_0.get_inverse() * self.list_nodes[TypeOfVariables.MOTION][1].frame_0
+        frame_ref = self.list_nodes[TypeOfVariables.MOTION][0].frame_ref.get_inverse() * self.list_nodes[TypeOfVariables.MOTION][1].frame_ref
         node_rel_dof = self.list_nodes[TypeOfVariables.RELATIVE_MOTION][0]
-        node_rel_dof.set_frame_0(frame_0)
+        node_rel_dof.set_frame_0(frame_ref)
 
         n_rel_dof = self.elem_props.get_number_of_relative_dof()
         self.bt = np.zeros((6, 12+n_rel_dof))
         self.bt[:, 6:] = np.block([-np.eye(6), self.elem_props.A])
-        self.bt[:, :6] = frame_0.get_inverse_adjoint()
+        self.bt[:, :6] = frame_ref.get_inverse_adjoint()
 
         ATA = np.matmul(np.transpose(self.elem_props.A), self.elem_props.A)
         node_rel_dof.v0 = - np.linalg.solve(ATA, np.matmul(np.transpose(self.elem_props.A),

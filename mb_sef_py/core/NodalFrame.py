@@ -6,9 +6,10 @@ from ..math.SE3 import Frame
 
 
 class NodalFrame(Node):
-    def __init__(self, frame_0=Frame(), name=None):
+    def __init__(self, frame_ref=Frame(), name=None):
         Node.__init__(self, name)
-        self.frame_0 = frame_0
+        self.frame_ref = Frame(ref_frame=frame_ref)
+        self.frame_0 = Frame(ref_frame=frame_ref)
         self.frame = None
 
     @staticmethod

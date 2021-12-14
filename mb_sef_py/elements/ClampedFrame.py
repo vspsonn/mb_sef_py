@@ -21,7 +21,7 @@ class ClampedFrame(ElementWithConstraints):
         ElementWithConstraints.__init__(self, props)
         self.add_node(node)
         self.bt = np.eye(6)
-        self.inverse_frame_0 = None
+        self.inverse_frame_ref = None
 
     def get_number_of_dofs(self):
         return 6
@@ -32,12 +32,12 @@ class ClampedFrame(ElementWithConstraints):
 
     def initialize(self, model):
         ElementWithConstraints.initialize(self, model)
-        frame_0 = self.list_nodes[TypeOfVariables.MOTION][0].frame_0
-        self.inverse_frame_0 = frame_0.get_inverse()
+        frame_ref = self.list_nodes[TypeOfVariables.MOTION][0].frame_ref
+        self.inverse_frame_ref = frame_ref.get_inverse()
 
     def assemble_constraint_and_bt(self, model):
         frame_A = self.list_nodes[TypeOfVariables.MOTION][0].frame[model.current_configuration]
-        self.constraint = Frame.get_parameters_from_frame(self.inverse_frame_0 * frame_A)
+        self.constraint = Frame.get_parameters_from_frame(self.inverse_frame_ref * frame_A)
 
     def assemble_kt_impl(self, model):
         lambd = self.list_nodes[TypeOfVariables.LAGRANGE_MULTIPLIER][0].lambd[model.current_configuration]

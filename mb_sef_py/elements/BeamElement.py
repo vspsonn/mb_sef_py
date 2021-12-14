@@ -71,8 +71,8 @@ class BeamProperties_EIGJ(BeamProperties):
 
 
 def discretize_beam(model, node_start, node_end, number_of_element, props):
-    frame_start = node_start.frame_0
-    frame_end = node_end.frame_0
+    frame_start = node_start.frame_ref
+    frame_end = node_end.frame_ref
 
     parameters_of_relative_frame = Frame.get_parameters_from_frame(frame_start.get_inverse() * frame_end)
 
@@ -108,8 +108,8 @@ class BeamElement(Element):
 
     def initialize(self, model):
         Element.initialize(self, model)
-        HA = self.list_nodes[TypeOfVariables.MOTION][0].frame_0
-        HB = self.list_nodes[TypeOfVariables.MOTION][1].frame_0
+        HA = self.list_nodes[TypeOfVariables.MOTION][0].frame_ref
+        HB = self.list_nodes[TypeOfVariables.MOTION][1].frame_ref
         self.d0 = Frame.get_parameters_from_frame(HA.get_inverse() * HB)
         self.L = np.linalg.norm(self.d0[:3])
 

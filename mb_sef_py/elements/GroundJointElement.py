@@ -26,7 +26,7 @@ class GroundJointElement(ElementWithConstraints):
     def initialize(self, model):
         ElementWithConstraints.initialize(self, model)
         node_rel_dof = self.list_nodes[TypeOfVariables.RELATIVE_MOTION][0]
-        node_rel_dof.set_frame_0(self.list_nodes[TypeOfVariables.MOTION][0].frame_0)
+        node_rel_dof.set_frame_0(self.list_nodes[TypeOfVariables.MOTION][0].frame_ref)
 
         self.bt = np.block([-np.eye(6), self.elem_props.A])
 

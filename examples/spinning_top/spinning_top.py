@@ -16,7 +16,7 @@ node_0 = model.add_node(NodalFrame, Frame(x=p_root))
 node_1 = model.add_node(NodalFrame, Frame(x=p_tip))
 
 node_0.set_initial_velocity(np.array([0., 0., 0., 0., 150, -4.61538]))
-rel_frame = node_0.frame_0.get_inverse() * node_1.frame_0
+rel_frame = node_0.frame_ref.get_inverse() * node_1.frame_ref
 node_1.set_initial_velocity(np.matmul(rel_frame.get_inverse_adjoint(), node_0.v0))
 
 sj = SphericalJointProperties()
