@@ -87,6 +87,7 @@ class ElementWithConstraints(Element):
         pass
 
     def mesh(self, model):
+        Element.mesh(self, model)
         node_lm = model.add_node(NodeLagrangeMultipliers, self.get_number_of_constraints(),
                                  self.elem_props.constraint_scaling)
         self.list_nodes[TypeOfVariables.LAGRANGE_MULTIPLIER].append(node_lm)

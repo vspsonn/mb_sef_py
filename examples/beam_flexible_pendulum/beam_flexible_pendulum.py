@@ -2,7 +2,7 @@ import numpy as np
 
 from mb_sef_py.core import Model, NodalFrame
 from mb_sef_py.elements import BeamProperties_EIGJ, discretize_beam, HingeJointProperties, GroundJointElement
-from mb_sef_py.math import Frame
+from mb_sef_py.math import Frame, UnitQuaternion
 from mb_sef_py.solvers import TimeIntegrationParameters, GeneralizedAlpha
 from mb_sef_py.utils import Logger, SensorNode, LogNodalFields
 
@@ -22,9 +22,23 @@ beam_props.gravity = np.array([0., -9.81, 0.])
 p_root = np.array([0., 0., 0.])
 p_tip = np.array([1., 0., 0.])
 
-f_0 = Frame(x=p_root)
+# f_0 = Frame(x=p_root)
+# node_0 = model.add_node(NodalFrame, f_0)
+# f_1 = Frame(x=p_tip)
+# node_1 = model.add_node(NodalFrame, f_1)
+
+theta = 1.e-18 * np.pi
+n_0 = np.array([0., np.cos(theta), np.sin(theta)])
+b_0 = np.array([0., -np.sin(theta), np.cos(theta)])
+n_0 = np.array([0., 1., 0.])
+b_0 = np.array([0., 0., 1.])
+q_0 = UnitQuaternion()
+q_0.set_from_triad(np.array([1., 0., 0.]), n_0, b_0)
+q_1 = UnitQuaternion()
+q_1.set_from_triad(np.array([1., 0., 0.]), n_0, b_0)
+f_0 = Frame(x=p_root, q=q_0)
 node_0 = model.add_node(NodalFrame, f_0)
-f_1 = Frame(x=p_tip)
+f_1 = Frame(x=p_tip, q=q_1)
 node_1 = model.add_node(NodalFrame, f_1)
 
 discretize_beam(model, node_0, node_1, 10, beam_props)

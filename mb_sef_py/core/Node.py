@@ -19,6 +19,13 @@ class Node(abc.ABC):
     def get_number_of_dofs(self):
         pass
 
+    @abc.abstractmethod
+    def get_motion_coordinates(self, configuration):
+        pass
+
+    def get_number_of_motion_coordinates(self):
+        return self.get_number_of_dofs()
+
     def set_node_number(self, node_number):
         self.node_number = node_number
 

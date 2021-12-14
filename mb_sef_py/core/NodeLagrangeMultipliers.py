@@ -15,6 +15,9 @@ class NodeLagrangeMultipliers(Node):
     def get_field():
         return TypeOfVariables.LAGRANGE_MULTIPLIER
 
+    def get_motion_coordinates(self, configuration):
+        return self.lambd[configuration]
+
     def get_number_of_dofs(self):
         return self.number_of_multipliers
 
