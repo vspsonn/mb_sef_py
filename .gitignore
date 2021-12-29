@@ -1,0 +1,6 @@
+build/
+dist/
+mb_sef_py.egg-info/
+*.csv
+*.h5
+
